@@ -11,7 +11,6 @@ import android.graphics.Color
 import android.os.Build
 
 
-
 import android.view.MotionEvent
 
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -40,26 +39,30 @@ class MainActivity : AppCompatActivity() {
         setupHelloTextView()
         setupTouchListeners()
     }
-        private fun setupHelloTextView() {
-            val layoutParams = binding.hello.layoutParams as ConstraintLayout.LayoutParams
-            layoutParams.apply {
-                startToStart = ConstraintLayout.LayoutParams.UNSET
-                endToEnd = ConstraintLayout.LayoutParams.UNSET
-                topToTop = ConstraintLayout.LayoutParams.UNSET
-                bottomToBottom = ConstraintLayout.LayoutParams.UNSET
-            }
-            binding.hello.layoutParams = layoutParams
+
+    private fun setupHelloTextView() {
+        val layoutParams = binding.hello.layoutParams as ConstraintLayout.LayoutParams
+        layoutParams.apply {
+            startToStart = ConstraintLayout.LayoutParams.UNSET
+            endToEnd = ConstraintLayout.LayoutParams.UNSET
+            topToTop = ConstraintLayout.LayoutParams.UNSET
+            bottomToBottom = ConstraintLayout.LayoutParams.UNSET
         }
+        binding.hello.layoutParams = layoutParams
+    }
+
     private fun setupTouchListeners() {
         binding.hello.setOnTouchListener { _, event -> handleHelloTouch(event) }
         binding.parentLayout.setOnTouchListener { _, event -> handleParentLayoutTouch(event) }
     }
+
     private fun handleHelloTouch(event: MotionEvent): Boolean {
         return if (event.action == MotionEvent.ACTION_DOWN) {
             cancelAnimationsAndCoroutines()
             true
         } else false
     }
+
     private fun handleParentLayoutTouch(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_DOWN) {
             cancelAnimationsAndCoroutines()
@@ -72,17 +75,25 @@ class MainActivity : AppCompatActivity() {
         }
         return true
     }
+
     private fun cancelAnimationsAndCoroutines() {
         animator?.cancel()
         lifeCycleCoroutine?.cancel()
     }
 
     private fun moveHelloTo(rawX: Float, rawY: Float) {
-        val newX = (rawX - binding.hello.width / 2).coerceIn(0f, binding.root.width - binding.hello.width.toFloat())
-        val newY = (rawY - binding.hello.height / 2).coerceIn(0f, binding.root.height - binding.hello.height.toFloat())
+        val newX = (rawX - binding.hello.width / 2).coerceIn(
+            0f,
+            binding.root.width - binding.hello.width.toFloat()
+        )
+        val newY = (rawY - binding.hello.height / 2).coerceIn(
+            0f,
+            binding.root.height - binding.hello.height.toFloat()
+        )
         binding.hello.x = newX
         binding.hello.y = newY
     }
+
     private fun setColorBasedOnLocale() {
         val currentLocale = getCurrentLocale()
         when (currentLocale) {
@@ -118,6 +129,7 @@ class MainActivity : AppCompatActivity() {
             isMovingDown = !isMovingDown
         }
     }
+
     private suspend fun ObjectAnimator.suspendAndAwaitEnd() =
         suspendCancellableCoroutine { continuation ->
             addListener(object : AnimatorListenerAdapter() {
